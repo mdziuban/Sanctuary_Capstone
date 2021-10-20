@@ -8,7 +8,7 @@
           <div style="position: fixed" class="col-3 border border-dark">
             <!-- <img src='{% static "sanctuary\waterfall.JPG"  %}' class="img-thumbnail "> -->
             <!-- <h2 class="text-center">{{ userData.username }}</h2> -->
-            <h2 class="text-center">{{ UserData.user }}</h2>
+            <h2 class="text-center">{{ this.$store.state.username.username }}</h2>
           </div>
         </div>
         <div class="col-8 border border-dark">
@@ -32,13 +32,13 @@
                 <!-- <img v-if="post.img_content" :src="'api/'+post.img_content"> -->
                 <p>{{ post.hashtags }}</p>
                 <input
-                  v-model="replyPost.text_content"
+                  v-model="post.content"
                   type="text"
                   placeholder="Reply"
                 />
                 <!-- <input v-model="replyPost.img_content" type="image"> -->
                 <button
-                  @click="replyToPost(post.id)"
+                  @click="replyToPost(post.id, post.content)"
                   class="btn btn-success mx-3"
                 >
                   Reply
@@ -52,7 +52,7 @@
                     Show Replies
                   </button>
                 </p>
-                <div v-show="post.id === postReplyShow" class="card card-body">
+                <div v-show="post.id === postReplyShow" class="card card-body reply">
                   <div v-for="reply in ReplyData" :key="reply.id">
                     <div class="card card-body">
                       <h4>{{ reply.username }}</h4>
@@ -105,60 +105,45 @@ export default {
     },
     postFeed() {
       let [hashWords, content] = this.splitByHashtag(this.newPost.text_content);
-      getAPI.post(
-        "/post/",
-        {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.accessToken}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        },
-        {
-          user: "1",
-          text_content: content,
-          //img_content: this.newPost.img_content,
-          hashtags: hashWords,
+      const bodyParameters = {
+        username: this.$store.state.username.username,
+        text_content: content,
+        //img_content: this.newPost.img_content,
+        hashtags: hashWords,
+      };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
         }
-      );
+      };
+      getAPI.post("/post/", bodyParameters, config);
     },
-    replyToPost(post) {
-      getAPI.post(
-        "/replyadd/",
-        {
-          user: "1",
-          text_content: this.replyPost.text_content,
-          post_id: post,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.accessToken}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
+    replyToPost(post, content) {
+      const bodyParameters = {
+        user: "1",
+        text_content: content,
+        post_id: post,
+      };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
         }
-      );
+      };
+      getAPI.post("/replyadd/", bodyParameters, config);
     },
     loadReplies(post) {
       (this.postReplyShow = post),
         getAPI
-          .get(
-            "/reply/",
-            {
-              params: {
-                post_id: post,
-              },
+          .get("/reply/", {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.accessToken}`,
             },
-            {
-              headers: {
-                Authorization: `Bearer ${this.$store.state.accessToken}`,
-              },
-            }
-          )
+            params: { post_id: post },
+          })
           .then((response) => {
             this.$store.state.ReplyData = response.data;
           })
-          .then((response) => console.log(response));
+          // .then(console.log(this.$store.state.ReplyData));
     },
     getUser() {
       getAPI
@@ -188,3 +173,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.reply > div > div {
+  background: lightblue;
+}
+</style>

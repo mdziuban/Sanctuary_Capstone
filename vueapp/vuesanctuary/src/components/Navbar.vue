@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <a class="navbar-brand" href="#">Welcome, {{ this.$store.state.username.username }}</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -16,7 +16,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item" v-if="accessToken!=null">
-              <router-link :to = "{ name: 'logout' }">Logout</router-link>
+              <router-link :to = "{ name: 'logout' }" class="btn btn-success">Logout</router-link>
             </li>
         </ul>
       </div>

@@ -12,6 +12,7 @@ export default createStore({
             PostData: '',
             ReplyData: '',
             UserData: '',
+            username: null
         }
     },
     plugins:[createPersistedState()],
@@ -23,7 +24,11 @@ export default createStore({
         destroyToken (state) {
             state.accessToken = null
             state.refreshToken = null
+        },
+        saveUsername (state, username) {
+            state.username = username
         }
+
     },
     getters: {
         loggedIn (state) {
@@ -46,6 +51,7 @@ export default createStore({
                     context.commit('updateStorage', {
                         access: response.data.access, refresh: response.data.refresh
                     })
+                    context.commit('saveUsername', {username: userCredentials.username})
                     resolve()
                 })
                 .catch(err => {

@@ -3,6 +3,7 @@ import store from '../store'
 import Posts from '../views/Posts'
 import Login from '../views/Login'
 import Logout from '../views/Logout'
+import Register from '../views/Register'
 
 const routes = [
   {
@@ -23,6 +24,11 @@ const routes = [
     name: 'logout',
     component: Logout,
   },
+  {
+    path: '/register/',
+    name: 'register',
+    component: Register,
+  }
 ]
 
 const router = createRouter({

@@ -25,3 +25,22 @@ class GameDataSerializer(serializers.ModelSerializer):
         model = GameData
         fields = '__all__'
 
+
+class UserSerializer(serializers.ModelSerializer):
+    def create(self, *args, **kwargs):
+        user = super().create(*args, **kwargs)
+        p = user.password
+        user.set_password(p)
+        user.save()
+        return user
+
+    def update(self, *args, **kwargs):
+        user = super().update(*args, **kwargs)
+        p = user.password
+        user.set_password(p)
+        user.save()
+        return user
+
+    class Meta:
+        model = User
+        fields = "__all__" 

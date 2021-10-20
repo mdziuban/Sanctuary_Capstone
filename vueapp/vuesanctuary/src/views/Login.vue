@@ -15,7 +15,7 @@
           </div>
           <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
         </form>
-        
+        <router-link :to="{ name: 'register'}" class="btn btn-success">Register</router-link>
       </div>
     </div>
   </div>
