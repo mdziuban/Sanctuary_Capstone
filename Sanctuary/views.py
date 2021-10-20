@@ -6,8 +6,14 @@ from rest_framework.permissions import AllowAny
 
 
 class PlayerList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
     serializer_class = PlayerSerializer
+
+    def get_queryset(self):
+        queryset = User.objects.all()
+        username = self.request.query_params.get('username')
+        queryset = queryset.filter(username = username)
+        print(queryset)
+        return queryset
 
 class PlayerDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
@@ -22,7 +28,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
 
 class ReplyList(generics.ListCreateAPIView):
-    queryset = Reply.objects.all()
+    # queryset = Reply.objects.all()
     serializer_class = ReplySerializer
 
     def get_queryset(self):

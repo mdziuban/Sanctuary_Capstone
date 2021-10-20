@@ -8,6 +8,7 @@ The purpose of this application is to provide a way for those that like farming 
 
 ### Frontend
 - Vue.js
+- Vuex
 - Bootstrap
 
 ### Backend
@@ -15,6 +16,7 @@ The purpose of this application is to provide a way for those that like farming 
 - DjangoRestFramework
 - JWT
 - Pillow
+- Postgresql
 
 ## User Stories
 

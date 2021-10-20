@@ -101,12 +101,13 @@ export default {
         })
         .then((response) => {
           this.$store.state.PostData = response.data;
+          
         });
     },
     postFeed() {
       let [hashWords, content] = this.splitByHashtag(this.newPost.text_content);
       const bodyParameters = {
-        username: this.$store.state.username.username,
+        user: this.$store.state.UserData.id,
         text_content: content,
         //img_content: this.newPost.img_content,
         hashtags: hashWords,
@@ -120,7 +121,7 @@ export default {
     },
     replyToPost(post, content) {
       const bodyParameters = {
-        user: "1",
+        user: this.$store.state.UserData.id,
         text_content: content,
         post_id: post,
       };
@@ -129,7 +130,8 @@ export default {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         }
       };
-      getAPI.post("/replyadd/", bodyParameters, config);
+      getAPI.post("/replyadd/", bodyParameters, config)
+      .then(this.loadFeed());
     },
     loadReplies(post) {
       (this.postReplyShow = post),
@@ -148,14 +150,15 @@ export default {
     getUser() {
       getAPI
         .get("/player/", {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.accessToken}`,
-          },
-        })
+            headers: {
+              Authorization: `Bearer ${this.$store.state.accessToken}`,
+            },
+            params: { username: this.$store.state.username.username },
+          })
         .then((response) => {
-          this.$store.state.UserData = response.data;
+          // console.log(response.data[0])
+          this.$store.state.UserData = response.data[0];
         })
-        .then((response) => console.log(response));
     },
     splitByHashtag(stringToSplit) {
       let hashWords = stringToSplit.match(/#(\w+)/g);

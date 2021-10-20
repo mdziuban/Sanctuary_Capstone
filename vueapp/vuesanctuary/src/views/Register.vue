@@ -19,6 +19,15 @@
           <div class="form-group">
             <input type="email" name="email" id="email" v-model="email" class="form-control" placeholder="Email">
           </div>
+          <div class="form-group">
+            <input type="text" name="bio" id="bio" v-model="bio" class="form-control" placeholder="Bio">
+          </div>
+          <div class="form-group">
+            <input type="text" name="first_name" id="first_name" v-model="first_name" class="form-control" placeholder="First Name">
+          </div>
+          <div class="form-group">
+            <input type="text" name="last_name" id="last_name" v-model="last_name" class="form-control" placeholder="Last Name">
+          </div>
           <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
         </form>
         
@@ -38,6 +47,9 @@ export default {
             password1: '',
             password2: '',
             email: '',
+            bio: '',
+            last_name: '',
+            first_name: '',
             noMatch: false
         }
     },
@@ -56,7 +68,10 @@ export default {
             const bodyParameters = {
                 username: this.username,
                 password: this.password1,
-                email: this.email
+                email: this.email,
+                bio: this.bio,
+                last_name: this.last_name,
+                first_name: this.first_name
             }
             getAPI.post('/register/', bodyParameters)
             .then(() => this.$router.push({name: 'login'}))
