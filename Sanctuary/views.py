@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class PlayerList(generics.ListCreateAPIView):
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = PlayerSerializer
 
@@ -17,6 +17,7 @@ class PlayerDetails(generics.RetrieveUpdateDestroyAPIView):
 
 class PostList(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
+
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 

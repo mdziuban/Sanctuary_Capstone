@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import { getAPI } from './axios-api'
+import createPersistedState from "vuex-persistedstate"
 
 
 
@@ -8,8 +9,12 @@ export default createStore({
         return {
             accessToken: null,
             refreshToken: null,
+            PostData: '',
+            ReplyData: '',
+            UserData: '',
         }
     },
+    plugins:[createPersistedState()],
     mutations: {
         updateStorage (state, { access, refresh }){
             state.accessToken = access

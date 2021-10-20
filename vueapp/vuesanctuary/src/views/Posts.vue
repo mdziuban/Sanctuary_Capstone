@@ -8,7 +8,7 @@
           <div style="position: fixed" class="col-3 border border-dark">
             <!-- <img src='{% static "sanctuary\waterfall.JPG"  %}' class="img-thumbnail "> -->
             <!-- <h2 class="text-center">{{ userData.username }}</h2> -->
-            <h2 class="text-center">{{ userData.user }}</h2>
+            <h2 class="text-center">{{ UserData.user }}</h2>
           </div>
         </div>
         <div class="col-8 border border-dark">
@@ -21,7 +21,11 @@
             <!-- <input v-model="newPost.img_content" type='text' placeholder="New Img Content"> -->
             <button @click="postFeed()" class="btn btn-success">submit</button>
             <ul class="list-group">
-              <li v-for="post in posts" :key="post.id" class="list-group-item">
+              <li
+                v-for="post in PostData"
+                :key="post.id"
+                class="list-group-item"
+              >
                 <h3>{{ post.username }}</h3>
                 <p>{{ post.created }}</p>
                 <p>{{ post.text_content }}</p>
@@ -49,7 +53,7 @@
                   </button>
                 </p>
                 <div v-show="post.id === postReplyShow" class="card card-body">
-                  <div v-for="reply in replies" :key="reply.id">
+                  <div v-for="reply in ReplyData" :key="reply.id">
                     <div class="card card-body">
                       <h4>{{ reply.username }}</h4>
                       <p>{{ reply.reply_created }}</p>
@@ -69,13 +73,12 @@
 <script>
 import { getAPI } from "../axios-api";
 import Navbar from "../components/Navbar.vue";
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   name: "Posts",
   data() {
     return {
-      // posts: [],
       replies: [],
       postReplyShow: "",
       newPost: {},
@@ -87,72 +90,95 @@ export default {
   components: {
     Navbar,
   },
-  computed: mapState(['posts']),
+  computed: mapState(["PostData", "ReplyData", "UserData"]),
   methods: {
     loadFeed() {
-      getAPI.get("/post/", {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.accessToken}`
-        }
-      })
-        .then(response => {
-            console.log('Post API has recieved data')
-            this.$store.state.posts = response.data
+      getAPI
+        .get("/post/", {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+          },
         })
+        .then((response) => {
+          this.$store.state.PostData = response.data;
+        });
     },
     postFeed() {
       let [hashWords, content] = this.splitByHashtag(this.newPost.text_content);
-      fetch("/post/", {
-        method: "POST",
-        body: JSON.stringify({
+      getAPI.post(
+        "/post/",
+        {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        },
+        {
           user: "1",
           text_content: content,
           //img_content: this.newPost.img_content,
-          hashtags: hashWords.join(" "),
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
+          hashtags: hashWords,
+        }
+      );
     },
     replyToPost(post) {
-      fetch("/replyadd/", {
-        method: "POST",
-        body: JSON.stringify({
-          user: "2",
+      getAPI.post(
+        "/replyadd/",
+        {
+          user: "1",
           text_content: this.replyPost.text_content,
           post_id: post,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
     },
     loadReplies(post) {
       (this.postReplyShow = post),
         getAPI
-          .get("/reply/", {
-            params: {
-              post_id: post,
+          .get(
+            "/reply/",
+            {
+              params: {
+                post_id: post,
+              },
             },
+            {
+              headers: {
+                Authorization: `Bearer ${this.$store.state.accessToken}`,
+              },
+            }
+          )
+          .then((response) => {
+            this.$store.state.ReplyData = response.data;
           })
-          .then((response) => (this.replies = response.data))
           .then((response) => console.log(response));
     },
     getUser() {
       getAPI
         .get("/player/", {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.accessToken}`
-        }
-      })
-        .then((response) => (this.userData = response.data))
-        .then((response) => console.log(response))
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+          },
+        })
+        .then((response) => {
+          this.$store.state.UserData = response.data;
+        })
+        .then((response) => console.log(response));
     },
     splitByHashtag(stringToSplit) {
       let hashWords = stringToSplit.match(/#(\w+)/g);
+      if (hashWords) {
+        hashWords = hashWords.join(" ");
+      } else {
+        hashWords = "";
+      }
       let content = stringToSplit.split("#")[0];
       return [hashWords, content];
     },
