@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.CharField(max_length=500)
+    profilePic = models.TextField(blank=True)
     suspended = models.BooleanField()
 
     def __str__(self):

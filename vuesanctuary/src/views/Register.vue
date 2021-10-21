@@ -28,7 +28,7 @@
           <div class="form-group">
             <input type="text" name="last_name" id="last_name" v-model="last_name" class="form-control" placeholder="Last Name">
           </div>
-          <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
+          <button type="submit" class="btn btn-lg btn-primary btn-block">Register</button>
         </form>
         
       </div>

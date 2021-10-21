@@ -4,6 +4,7 @@ import Posts from '../views/Posts'
 import Login from '../views/Login'
 import Logout from '../views/Logout'
 import Register from '../views/Register'
+import Player from '../views/Player'
 
 const routes = [
   {
@@ -23,6 +24,17 @@ const routes = [
     path: '/logout/',
     name: 'logout',
     component: Logout,
+    meta: {
+      requiresLogin: true
+    }
+  },
+  {
+    path: '/player/',
+    name: 'playerDetails',
+    component: Player,
+    meta: {
+      requiresLogin: true
+    }
   },
   {
     path: '/register/',

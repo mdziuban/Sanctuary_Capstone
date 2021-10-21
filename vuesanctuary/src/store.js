@@ -12,7 +12,7 @@ export default createStore({
             PostData: '',
             ReplyData: '',
             UserData: '',
-            username: null
+            username: null,
         }
     },
     plugins: [createPersistedState()],

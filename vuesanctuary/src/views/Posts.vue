@@ -5,11 +5,13 @@
     <article class="container" id="app">
       <div class="row">
         <div class="col-4">
+          <router-link :to="{ name: 'playerDetails' }">
+
           <div style="position: fixed" class="col-3 border border-dark">
-            <!-- <img src='{% static "sanctuary\waterfall.JPG"  %}' class="img-thumbnail "> -->
-            <!-- <h2 class="text-center">{{ userData.username }}</h2> -->
+            <img src='https://media.istockphoto.com/photos/beautiful-waterfall-in-forest-at-erawan-national-park-in-thailand-picture-id1323033650?b=1&k=20&m=1323033650&s=170667a&w=0&h=ZXxTlFUI62q-o2mpVHlpeQEgDBa3ehFJars-IQRvuSQ=' class="img-thumbnail ">
             <h2 class="text-center">{{ this.$store.state.username.username }}</h2>
           </div>
+          </router-link>
         </div>
         <div class="col-8 border border-dark">
           <div class="row">
@@ -38,7 +40,7 @@
                 />
                 <!-- <input v-model="replyPost.img_content" type="image"> -->
                 <button
-                  @click="replyToPost(post.id, post.content)"
+                  @click="replyToPost(post)"
                   class="btn btn-success mx-3"
                 >
                   Reply
@@ -85,6 +87,7 @@ export default {
       userData: {},
       replyPost: {},
       isHidden: false,
+      replyContent: ''
     };
   },
   components: {
@@ -101,8 +104,8 @@ export default {
         })
         .then((response) => {
           this.$store.state.PostData = response.data;
-          
-        });
+        }).catch(err => 
+        (console.log(err)));
     },
     postFeed() {
       let [hashWords, content] = this.splitByHashtag(this.newPost.text_content);
@@ -118,13 +121,14 @@ export default {
         }
       };
       getAPI.post("/post/", bodyParameters, config)
-      .then(() => this.loadFeed());
+      .then(() => this.loadFeed())
+      .then(this.newPost.text_content = '');
     },
-    replyToPost(post, content) {
+    replyToPost(post) {
       const bodyParameters = {
         user: this.$store.state.UserData.id,
-        text_content: content,
-        post_id: post,
+        text_content: post.content,
+        post_id: post.id,
       };
       const config = {
         headers: {
@@ -132,7 +136,8 @@ export default {
         }
       };
       getAPI.post("/replyadd/", bodyParameters, config)
-      .then(() => this.loadReplies(post));
+      .then(() => this.loadReplies(post.id))
+      .then(() => post.content = '')
     },
     loadReplies(post) {
       (this.postReplyShow = post),

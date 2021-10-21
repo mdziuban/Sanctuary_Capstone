@@ -1,12 +1,7 @@
 from rest_framework import serializers
 from .models import Player, Post, Reply, GameData, User
 
-class PlayerSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
 
-    class Meta:
-        model = User
-        fields = '__all__'
 
 class PostSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
@@ -26,7 +21,7 @@ class GameDataSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
+class RegisterSerializer(serializers.ModelSerializer):
     def create(self, *args, **kwargs):
         user = super().create(*args, **kwargs)
         p = user.password
@@ -69,4 +64,11 @@ class UserSerializer(DynamicFieldsModelSerializer, serializers.HyperlinkedModelS
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email')
+        fields = ('id', 'username', 'email', 'first_name', 'last_name')
+
+class PlayerSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Player
+        fields = '__all__'

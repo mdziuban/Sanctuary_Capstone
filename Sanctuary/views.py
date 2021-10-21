@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import generics 
 from . models import Player, Post, Reply, GameData, User
-from .serializers import PlayerSerializer, PostSerializer, ReplySerializer, GameDataSerializer, UserSerializer
+from .serializers import PlayerSerializer, PostSerializer, ReplySerializer, GameDataSerializer, UserSerializer, RegisterSerializer
 from rest_framework.permissions import AllowAny
 
 
@@ -15,9 +15,13 @@ class PlayerList(generics.ListCreateAPIView):
         print(queryset)
         return queryset
 
-class PlayerDetails(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
+class PlayerDetails(generics.ListCreateAPIView):
+    queryset = Player.objects.all()
     serializer_class = PlayerSerializer
+
+# class PlayerDetails(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = PlayerSerializer
 
 class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.all()
@@ -28,7 +32,6 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
 
 class ReplyList(generics.ListCreateAPIView):
-    # queryset = Reply.objects.all()
     serializer_class = ReplySerializer
 
     def get_queryset(self):
@@ -57,4 +60,4 @@ class GameDataDetail(generics.RetrieveUpdateDestroyAPIView):
 class Register(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = RegisterSerializer
