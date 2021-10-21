@@ -117,7 +117,8 @@ export default {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         }
       };
-      getAPI.post("/post/", bodyParameters, config);
+      getAPI.post("/post/", bodyParameters, config)
+      .then(() => this.loadFeed());
     },
     replyToPost(post, content) {
       const bodyParameters = {
@@ -131,7 +132,7 @@ export default {
         }
       };
       getAPI.post("/replyadd/", bodyParameters, config)
-      .then(this.loadFeed());
+      .then(() => this.loadReplies(post));
     },
     loadReplies(post) {
       (this.postReplyShow = post),
@@ -156,7 +157,7 @@ export default {
             params: { username: this.$store.state.username.username },
           })
         .then((response) => {
-          // console.log(response.data[0])
+          console.log(response.data[0])
           this.$store.state.UserData = response.data[0];
         })
     },

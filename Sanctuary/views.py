@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny
 
 
 class PlayerList(generics.ListCreateAPIView):
-    serializer_class = PlayerSerializer
+    serializer_class = UserSerializer
 
     def get_queryset(self):
         queryset = User.objects.all()
