@@ -21,7 +21,7 @@
           </div>
           <div class="form-group">
               <label>Bio</label>
-            <input type="text" name="bio" id="bio" v-model="bio" class="form-control" :placeholder="additionalData.bio">
+            <input type="text" name="bio" id="bio" v-model="bio" class="form-control" :placeholder="AdditionalData.bio">
           </div>
           <div class="form-group">
               <label>First Name</label>
@@ -32,11 +32,12 @@
             <input type="text" name="last_name" id="last_name" v-model="last_name" class="form-control" :placeholder="UserData.last_name">
           </div>
           <div class="form-group">
-              <label>Profile Picture</label>
-            <input type="text" name="profilePic" id="profilePic" v-model="profilePic" class="form-control" :placeholder="additionalData.profilePic">
-          </div>
           <button type="submit" class="btn btn-lg btn-primary btn-block">Update</button>
+          </div>
         </form>
+              <label>Profile Picture</label>
+            <input type="file" @change='OnFileSelected'>
+            <button @click="UploadImage" class="btn btn-success">Change Profile Picture</button>
     </div>
 </template>
 
@@ -46,10 +47,11 @@ import { getAPI } from '../axios-api'
 export default {
   data() {
     return {
-        additionalData: {},
+        // additionalData: {},
+        selectedImage: null,
     };
   },
-  computed: mapState(["UserData"]),
+  computed: mapState(["UserData", "AdditionalData"]),
   methods: {
     getUser() {
       getAPI.get("/player/" + this.$store.state.UserData.id, {
@@ -58,6 +60,18 @@ export default {
         },
       }).then((response) => this.additionalData = response.data[0])
     },
+    OnFileSelected(event) {
+      this.selectedImage = event.target.files[0]
+    },
+    UploadImage(){
+      const bodyParameters = new FormData();
+      bodyParameters.append('profilePic', this.selectedImage, this.selectedImage.name)
+      getAPI.post("/update/" + this.$store.state.UserData.id, bodyParameters, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      })
+    }
   },
   created() {
       this.getUser()

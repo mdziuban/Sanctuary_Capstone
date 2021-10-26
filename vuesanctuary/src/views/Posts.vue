@@ -8,7 +8,7 @@
           <router-link :to="{ name: 'playerDetails' }">
 
           <div style="position: fixed" class="col-3 border border-dark">
-            <img src='https://media.istockphoto.com/photos/beautiful-waterfall-in-forest-at-erawan-national-park-in-thailand-picture-id1323033650?b=1&k=20&m=1323033650&s=170667a&w=0&h=ZXxTlFUI62q-o2mpVHlpeQEgDBa3ehFJars-IQRvuSQ=' class="img-thumbnail ">
+            <img :src="AdditionalData.profilePic" class="img-thumbnail" alt="Profil Pic">
             <h2 class="text-center">{{ this.$store.state.username.username }}</h2>
           </div>
           </router-link>
@@ -93,7 +93,7 @@ export default {
   components: {
     Navbar,
   },
-  computed: mapState(["PostData", "ReplyData", "UserData"]),
+  computed: mapState(["PostData", "ReplyData", "UserData", "AdditionalData"]),
   methods: {
     loadFeed() {
       getAPI
@@ -162,9 +162,17 @@ export default {
             params: { username: this.$store.state.username.username },
           })
         .then((response) => {
-          console.log(response.data[0])
+          // console.log(response.data[0])
           this.$store.state.UserData = response.data[0];
-        })
+        }).then(this.getAdditionalUserData())
+    },
+    getAdditionalUserData() {
+      getAPI.get("/player/" + this.$store.state.UserData.id, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      }).then((response) => {console.log(response) 
+      this.$store.state.AdditionalData = response.data[0]})
     },
     splitByHashtag(stringToSplit) {
       let hashWords = stringToSplit.match(/#(\w+)/g);
@@ -178,7 +186,7 @@ export default {
     },
   },
   created() {
-    this.loadFeed(), this.getUser();
+    this.loadFeed(), this.getAdditionalUserData();
   },
 };
 </script>

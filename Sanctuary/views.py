@@ -18,10 +18,19 @@ class PlayerList(generics.ListCreateAPIView):
 class PlayerDetails(generics.ListCreateAPIView):
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer
+    
 
-# class PlayerDetails(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = PlayerSerializer
+
+class PlayerUpdate(generics.RetrieveUpdateDestroyAPIView):
+    # queryset = Player.objects.all()
+    serializer_class = PlayerSerializer
+
+    def get_queryset(self):
+        queryset = Player.objects.all()
+        id = self.request.query_params.get('id')
+        queryset = queryset.filter(id = id)
+        print(queryset)
+        return queryset
 
 class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.all()

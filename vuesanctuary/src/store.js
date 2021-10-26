@@ -12,6 +12,7 @@ export default createStore({
             PostData: '',
             ReplyData: '',
             UserData: '',
+            AdditionalData: '',
             username: null,
         }
     },
@@ -28,6 +29,7 @@ export default createStore({
             state.accessToken = null
             state.refreshToken = null
             state.UserData = null
+            state.AdditionalData = null
         },
         saveUsername(state, username) {
             state.username = username

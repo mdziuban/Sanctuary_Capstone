@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { getAPI } from "../axios-api";
+
 export default {
   name: 'login',
   data() {
@@ -40,12 +42,26 @@ export default {
             password: this.password
         })
         .then(() => {
+            // this.getUser()
             this.$router.push({ name: 'posts' })
         })
         .catch(err => {
             console.log(err)
             this.incorrect = true
         })
+    },
+    getUser() {
+      getAPI
+        .get("/player/", {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.accessToken}`,
+            },
+            params: { username: this.$store.state.username.username },
+          })
+        .then((response) => {
+          // console.log(response.data[0])
+          this.$store.state.UserData = response.data[0];
+        }).then(this.getAdditionalUserData())
     },
   },
 }
