@@ -1,13 +1,17 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | Farm Kit</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="shortcut icon" href="../static/unity/TemplateData/favicon.ico">
+    <link rel="stylesheet" href="../static/unity/TemplateData/style.css">
   </head>
   <body>
+    <h2>Play the Sanctuary Demo</h2>
+    <h3>Early prototype version. <br> Does not represent final product!</h3>
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=960 height=600></canvas>
       <div id="unity-loading-bar">
@@ -26,7 +30,7 @@
       </div>
     </div>
     <script>
-      var buildUrl = "Build";
+      var buildUrl = "../static/unity/Build";
       var loaderUrl = buildUrl + "/farm_prototype.loader.js";
       var config = {
         dataUrl: buildUrl + "/farm_prototype.data.gz",

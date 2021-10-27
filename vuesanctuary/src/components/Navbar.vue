@@ -14,9 +14,13 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item" v-if="accessToken!=null">
+        <ul class="navbar-nav" v-if="accessToken!=null">
+            <li class="nav-item" >
               <router-link :to = "{ name: 'logout' }" class="btn btn-success">Logout</router-link>
+            </li>
+            <li class="nav-item">
+              <!-- <a @click="playGame" class="btn btn-success">Play Game</a> -->
+              <a href="http://127.0.0.1:8000/playgame/" class="btn btn-outline-secondary mx-3">Play Game</a>
             </li>
         </ul>
       </div>
@@ -26,8 +30,19 @@
 
 <script>
 import { mapState } from 'vuex'
+import { getAPI } from "../axios-api";
+
 export default {
   name: "Navbar",
-  computed: mapState(['accessToken'])
+  computed: mapState(['accessToken']),
+  methods: {
+    playGame() {
+      getAPI.get('/playgame/', {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+          },
+        })
+    }
+  }
 }
 </script>

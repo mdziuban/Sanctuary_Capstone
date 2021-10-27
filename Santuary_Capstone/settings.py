@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
 
     'Sanctuary.apps.SanctuaryConfig',
+    # 'game_test.apps.GameTestConfig'
 ]
 
 MIDDLEWARE = [

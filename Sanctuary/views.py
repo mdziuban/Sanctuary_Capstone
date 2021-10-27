@@ -1,5 +1,5 @@
-from rest_framework.response import Response
-from rest_framework import generics 
+from rest_framework import generics
+from django.shortcuts import render
 from . models import Player, Post, Reply, GameData, User, SiteImages
 from .serializers import ImageSerializer, PlayerSerializer, PostSerializer, PostDetailSerializer, ReplySerializer, GameDataSerializer, UserSerializer, RegisterSerializer
 from rest_framework.permissions import AllowAny
@@ -12,17 +12,7 @@ class PlayerList(generics.ListCreateAPIView):
         queryset = User.objects.select_related('player')
         user = self.request.user
         queryset = queryset.filter(id = user.id)
-        return queryset
-
-# class PlayerDetails(generics.ListCreateAPIView):
-#     serializer_class = PlayerSerializer
-
-#     def get_queryset(self):
-#         queryset = Player.objects.all()
-#         user = self.request.user
-#         returnSet = queryset.filter(id=user.id)
-#         return returnSet
-    
+        return queryset    
 class PlayerDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -30,13 +20,6 @@ class PlayerDetails(generics.RetrieveUpdateDestroyAPIView):
 class PlayerUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer
-
-    # def get_queryset(self):
-    #     queryset = Player.objects.all()
-    #     id = self.request.query_params.get('id')
-    #     queryset = queryset.filter(id = id)
-    #     print(queryset)
-    #     return queryset
 
 class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.all()
@@ -81,3 +64,7 @@ class Images(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = SiteImages.objects.all()
     serializer_class = ImageSerializer
+
+
+def playGame(request):
+    return render(request, 'sanctuary/index.html')

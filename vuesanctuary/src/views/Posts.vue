@@ -11,6 +11,7 @@
             <img :src="UserData.player.profilePic" class="img-thumbnail" alt="Profil Pic">
             <h2 class="text-center">{{ this.$store.state.username.username }}</h2>
             <p>{{ UserData.player.bio }}</p>
+            
           </div>
           </router-link>
         </div>
@@ -201,6 +202,6 @@ export default {
 
 <style>
 .reply > div > div {
-  background: lightblue;
+  background: lightseagreen;
 }
 </style>

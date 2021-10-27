@@ -6,6 +6,7 @@ import Logout from '../views/Logout'
 import Register from '../views/Register'
 import Player from '../views/Player'
 
+
 const routes = [
   {
     path: '/',
@@ -40,7 +41,7 @@ const routes = [
     path: '/register/',
     name: 'register',
     component: Register,
-  }
+  },
 ]
 
 const router = createRouter({
