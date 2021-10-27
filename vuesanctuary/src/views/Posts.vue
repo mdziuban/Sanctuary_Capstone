@@ -7,9 +7,10 @@
         <div class="col-4">
           <router-link :to="{ name: 'playerDetails' }">
 
-          <div style="position: fixed" class="col-3 border border-dark">
-            <img :src="AdditionalData.profilePic" class="img-thumbnail" alt="Profil Pic">
+          <div v-if="UserData" style="position: fixed" class="col-3 border border-dark">
+            <img :src="UserData.player.profilePic" class="img-thumbnail" alt="Profil Pic">
             <h2 class="text-center">{{ this.$store.state.username.username }}</h2>
+            <p>{{ UserData.player.bio }}</p>
           </div>
           </router-link>
         </div>
@@ -18,7 +19,8 @@
             <input
               v-model="newPost.text_content"
               type="text"
-              placeholder="New Post Content"
+              class="p-5"
+              placeholder="What's on your mind?"
             />
             <!-- <input v-model="newPost.img_content" type='text' placeholder="New Img Content"> -->
             <button @click="postFeed()" class="btn btn-success">submit</button>
@@ -28,11 +30,25 @@
                 :key="post.id"
                 class="list-group-item"
               >
-                <h3>{{ post.username }}</h3>
-                <p>{{ post.created }}</p>
-                <p>{{ post.text_content }}</p>
+              <div class="card border-primary mb-3" >
+                <div class="card-header row">
+                  <div class="col-3">
+                    <img :src="post.user.player.profilePic" class="img-thumbnail" style="max-width: 60%">
+                    </div>
+                  
+                  <div class="col-9 text-start">{{ post.created }}
+                  <h3 class="card-title">{{ post.user.username }}</h3></div>
+                </div>
+                <div class="card-body text-start">
+                  
+                  <h5 class="card-text">{{ post.text_content }}<br><br>
                 <!-- <img v-if="post.img_content" :src="'api/'+post.img_content"> -->
-                <p>{{ post.hashtags }}</p>
+                  <p>{{ post.hashtags }}</p>
+                </h5>
+                </div>
+              </div>
+
+
                 <input
                   v-model="post.content"
                   type="text"
@@ -72,7 +88,7 @@
   </div>
 </template>
 
-<script>
+<script>  
 import { getAPI } from "../axios-api";
 import Navbar from "../components/Navbar.vue";
 import { mapState } from "vuex";
@@ -93,16 +109,17 @@ export default {
   components: {
     Navbar,
   },
-  computed: mapState(["PostData", "ReplyData", "UserData", "AdditionalData"]),
+  computed: mapState(["PostData", "ReplyData", "UserData"]),
   methods: {
     loadFeed() {
       getAPI
-        .get("/post/", {
+        .get("/postdetail/", {
           headers: {
             Authorization: `Bearer ${this.$store.state.accessToken}`,
           },
         })
         .then((response) => {
+          console.log(response)
           this.$store.state.PostData = response.data;
         }).catch(err => 
         (console.log(err)));
@@ -151,7 +168,6 @@ export default {
           .then((response) => {
             this.$store.state.ReplyData = response.data;
           })
-          // .then(console.log(this.$store.state.ReplyData));
     },
     getUser() {
       getAPI
@@ -162,17 +178,9 @@ export default {
             params: { username: this.$store.state.username.username },
           })
         .then((response) => {
-          // console.log(response.data[0])
+          console.log(JSON.stringify(response.data[0]))
           this.$store.state.UserData = response.data[0];
-        }).then(this.getAdditionalUserData())
-    },
-    getAdditionalUserData() {
-      getAPI.get("/player/" + this.$store.state.UserData.id, {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.accessToken}`,
-        },
-      }).then((response) => {console.log(response) 
-      this.$store.state.AdditionalData = response.data[0]})
+        })
     },
     splitByHashtag(stringToSplit) {
       let hashWords = stringToSplit.match(/#(\w+)/g);
@@ -186,7 +194,7 @@ export default {
     },
   },
   created() {
-    this.loadFeed(), this.getAdditionalUserData();
+    this.getUser(), this.loadFeed();
   },
 };
 </script>

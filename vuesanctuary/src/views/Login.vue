@@ -1,68 +1,112 @@
 <template>
-  <div>
-  <div class="container text-dark">
-    <div class="row justify-content-md-center">
-      <div class="col-md-5 p-3 login justify-content-md-center">
-        <h1 class="h3 mb-3 font-weight-normal text-center">Please sign in</h1>
-
-        <p v-if="incorrect">Incorrect username or password entered - please try again</p>
-        <form v-on:submit.prevent="login">
-          <div class="form-group">
-            <input type="text" name="username" id="user" v-model="username" class="form-control" placeholder="Username">
+  <div class="row">
+    <div class="col-sm-6">
+      <img :src="SiteImages.image" class="w-100" alt="Waterfall" />
+    </div>
+    <div class="col-sm-6">
+      <div class="row h-50 d-flex justify-content-center align-items-center">
+        <div class="row mb-3">
+          <h1 class="text-center my-3">Welcome to Sanctuary</h1>
+        </div>
+        <h4 v-if="incorrectAuth">
+          The username or password you entered was incorrect.
+        </h4>
+        <form v-on:submit.prevent="login()">
+          <div class="row mb-3">
+            <div class="col-sm-10">
+              <input
+                type="text"
+                name="username"
+                class="form-control"
+                id="user"
+                v-model="username"
+                placeholder="Username"
+              />
+            </div>
           </div>
-          <div class="form-group">
-            <input type="password" name="password" id="pass" v-model="password" class="form-control" placeholder="Password">
+          <div class="row mb-3">
+            <div class="col-sm-10">
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                id="pass"
+                v-model="password"
+                placeholder="Password"
+              />
+            </div>
           </div>
-          <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
+          <div class="col-sm-10 d-grid mb-3">
+            <input type="submit" class="btn btn-primary btn-lg" value="Login" />
+          </div>
         </form>
-        <router-link :to="{ name: 'register'}" class="btn btn-success">Register</router-link>
+        <div class="row h-50 d-flex justify-content-center align-items-center">
+          <div class="row mb-3">
+            <div class="col-sm-10 d-grid mb-3">
+              <router-link
+                :to="{ name: 'register' }"
+                class="btn btn-outline-secondary btn-lg"
+                >Register</router-link
+              >
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { getAPI } from "../axios-api";
 
 export default {
-  name: 'login',
+  name: "login",
   data() {
     return {
       username: "",
       password: "",
       incorrect: false,
-
-    }
+    };
   },
+  computed: mapState(["SiteImages"]),
   methods: {
     login() {
-        this.$store.dispatch('userLogin', {
-            username: this.username,
-            password: this.password
+      this.$store
+        .dispatch("userLogin", {
+          username: this.username,
+          password: this.password,
         })
         .then(() => {
-            // this.getUser()
-            this.$router.push({ name: 'posts' })
+          this.$router.push({ name: "posts" });
+          this.getUser();
         })
-        .catch(err => {
-            console.log(err)
-            this.incorrect = true
-        })
+        .catch((err) => {
+          console.log(err);
+          this.incorrect = true;
+        });
     },
     getUser() {
       getAPI
         .get("/player/", {
-            headers: {
-              Authorization: `Bearer ${this.$store.state.accessToken}`,
-            },
-            params: { username: this.$store.state.username.username },
-          })
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+          },
+          params: { username: this.$store.state.username.username },
+        })
         .then((response) => {
-          // console.log(response.data[0])
+          console.log(response.data[0]);
           this.$store.state.UserData = response.data[0];
-        }).then(this.getAdditionalUserData())
+        });
+    },
+    GetImages() {
+      getAPI
+        .get("/images/")
+        .then((response) => (this.$store.state.SiteImages = response.data[0]));
     },
   },
-}
+  created() {
+    this.GetImages();
+  },
+};
 </script>

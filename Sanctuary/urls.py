@@ -1,17 +1,18 @@
 
 from django.urls import path
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
-from . views import PlayerList, PlayerDetails, PostList, PlayerUpdate, PostDetail, ReplyList, ReplyAdd, ReplyDetail, GameDataList, GameDataDetail, Register
+from . views import Images, PlayerList, PlayerDetails, PostList, PlayerUpdate, PostDetail, ReplyList, ReplyAdd, ReplyDetail, GameDataList, GameDataDetail, Register
 
 urlpatterns = [
     path('player/', PlayerList.as_view(), name='player_list'),
     path('post/', PostList.as_view(), name='post_list'),
     path('reply/', ReplyList.as_view(), name='reply_list'),
     path('replyadd/', ReplyAdd.as_view(), name='reply_add'),
+    path('images/', Images.as_view(), name='images'),
     path('gamedata/', GameDataList.as_view(), name='game_data'),
     path('player/<int:pk>', PlayerDetails.as_view(), name='player_details'),
     path('update/<int:pk>', PlayerUpdate.as_view(), name='player_update'),
-    path('post/<str:user>', PostDetail.as_view(), name='post_details'),
+    path('postdetail/', PostDetail.as_view(), name='post_details'),
     path('reply/<int:pk>', ReplyDetail.as_view(), name='reply_details'),
     path('gamedata/<int:user_id>', GameDataDetail.as_view(), name='game_data_details'),
     path('register/', Register.as_view(), name='register'),
