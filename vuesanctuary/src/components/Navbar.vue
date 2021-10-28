@@ -1,7 +1,7 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-gradient" style="background-color: #404c24">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Welcome, {{ this.$store.state.username.username }}</a>
+      <a class="navbar-brand text-light" href="#">Welcome, {{ this.$store.state.username.username }}</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -16,11 +16,11 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav" v-if="accessToken!=null">
             <li class="nav-item" >
-              <router-link :to = "{ name: 'logout' }" class="btn btn-success">Logout</router-link>
+              <router-link :to = "{ name: 'logout' }" class="btn btn-outline-dark text-light">Logout</router-link>
             </li>
             <li class="nav-item">
               <!-- <a @click="playGame" class="btn btn-success">Play Game</a> -->
-              <a href="http://127.0.0.1:8000/playgame/" class="btn btn-outline-secondary mx-3">Play Game</a>
+              <a href="http://127.0.0.1:8000/playgame/" class="btn btn-outline-dark text-light mx-3">Play Game</a>
             </li>
         </ul>
       </div>
