@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-gradient" style="background-color: #404c24">
     <div class="container-fluid">
-      <a class="navbar-brand text-light" href="#">Welcome, {{ this.$store.state.username.username }}</a>
+      <router-link :to="{ name:'posts' }" class="navbar-brand text-light">Welcome, {{ this.$store.state.username.username }}</router-link>
       <button
         class="navbar-toggler"
         type="button"

@@ -12,7 +12,8 @@ class PlayerList(generics.ListCreateAPIView):
         queryset = User.objects.select_related('player')
         user = self.request.user
         queryset = queryset.filter(id = user.id)
-        return queryset    
+        return queryset  
+          
 class PlayerDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer

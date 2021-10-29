@@ -79,24 +79,10 @@ export default {
         })
         .then(() => {
           this.$router.push({ name: "posts" });
-          this.getUser();
         })
         .catch((err) => {
           console.log(err);
           this.incorrect = true;
-        });
-    },
-    getUser() {
-      getAPI
-        .get("/player/", {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.accessToken}`,
-          },
-          params: { username: this.$store.state.username.username },
-        })
-        .then((response) => {
-          console.log(response.data[0]);
-          this.$store.state.UserData = response.data[0];
         });
     },
     GetImages() {

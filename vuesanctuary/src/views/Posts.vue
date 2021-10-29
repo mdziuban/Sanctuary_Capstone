@@ -1,5 +1,5 @@
 <template>
-  <div class="posts bg-dark">
+  <body class="posts bg-dark">
     <Navbar></Navbar>
     <h1 class="text-center my-5 text-light">The Sanctuary</h1>
     <article class="container" id="app">
@@ -41,7 +41,7 @@
                   placeholder="What's on your mind?"
                 />
                 <!-- <input v-model="newPost.img_content" type='text' placeholder="New Img Content"> -->
-                <button @click="postFeed()" class="btn btn-success mb-1">
+                <button @click="postFeed()" class="btn btn-outline-dark my-1">
                   Post
                 </button>
               </div>
@@ -77,11 +77,11 @@
                 <div class="row my-2">
                 <input v-model="post.content" class="col-8" type="text" placeholder="Reply" />
                 <!-- <input v-model="replyPost.img_content" type="image"> -->
-                <button @click="replyToPost(post)" class="btn btn-success col-2">
+                <button @click="replyToPost(post)" class="btn btn-outline-dark col-2">
                   Reply
                 </button>
                   <button
-                    class="btn btn-primary col-2"
+                    class="btn btn-secondary bg-gradient col-2"
                     type="button"
                     @click="loadReplies(post.id)"
                   >
@@ -114,7 +114,7 @@
         </div>
       </div>
     </article>
-  </div>
+  </body>
 </template>
 
 <script>
@@ -148,7 +148,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
           this.$store.state.PostData = response.data;
         })
         .catch((err) => console.log(err));
@@ -209,7 +208,6 @@ export default {
           params: { username: this.$store.state.username.username },
         })
         .then((response) => {
-          console.log(JSON.stringify(response.data[0]));
           this.$store.state.UserData = response.data[0];
         });
     },
@@ -235,13 +233,20 @@ export default {
       return new Intl.DateTimeFormat("default", options).format(date);
     },
   },
-  created() {
-    this.getUser(), this.loadFeed();
+  async created() {
+    await this.getUser(), 
+    await this.loadFeed();
   },
 };
 </script>
 
 <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Zen+Antique+Soft&family=Zen+Maru+Gothic&display=swap');
+h1 {
+  font-family: 'Zen Antique Soft', serif;
+
+}
 .reply > div > div {
   background: #cbccbc;
 }
