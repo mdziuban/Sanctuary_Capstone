@@ -1,7 +1,7 @@
 <template>
-  <body class="posts bg-dark">
+  <body class="posts bg-light text-dark">
     <Navbar></Navbar>
-    <h1 class="text-center my-5 text-light">The Sanctuary</h1>
+    <h1 class="text-center my-5 ">The Sanctuary</h1>
     <article class="container" id="app">
       <div class="row">
         <div class="col-4">
@@ -9,7 +9,7 @@
             <div
               v-if="UserData"
               style="position: fixed"
-              class="col-3 col-xxl-2 text-light"
+              class="col-3 col-xxl-2 text-dark shadow"
             >
               <img
                 :src="UserData.player.profilePic"
@@ -19,13 +19,13 @@
               <h2 class="text-center">
                 {{ this.$store.state.username.username }}
               </h2>
-              <p class="">{{ UserData.player.bio }}</p>
+              <p class="p-2">{{ UserData.player.bio }}</p>
             </div>
           </router-link>
         </div>
-        <div class="col-8">
+        <div class="col-8 ">
           <div class="">
-            <div class="bg-light pe-1 pt-2 rounded row">
+            <div class="bg-light pe-1 pt-2 rounded row ">
               <div class="col-2">
                 <img
                   :src="UserData.player.profilePic"
@@ -46,22 +46,22 @@
                 </button>
               </div>
             </div>
-            <ul class="list-group mt-3">
+            <ul class="list-group mt-3 row">
               <li
                 v-for="post in PostData"
                 :key="post.id"
                 class="list-group-item"
               >
                 <div
-                  class="card mb-3 rounded shadow bg-gradient"
-                  style="background-color: #d4c9c1"
+                  class="card mb-1 rounded bg-gradient row"
+                  style="background-color: #f9f9f9"
                 >
-                  <div class="card-header row">
+                  <div class="card-header" style="display: flex;">
                     <div class="col-2">
                       <img :src="post.user.player.profilePic" class="col-12" />
                     </div>
 
-                    <div class="col-10 text-start">
+                    <div class="col-10 text-start px-3">
                       <h3 class="card-title">{{ post.user.username }}</h3>
                       <p>{{ formatDate(post.created) }}</p>
                     </div>
@@ -72,23 +72,28 @@
                       <!-- <img v-if="post.img_content" :src="'api/'+post.img_content"> -->
                       <p>{{ post.hashtags }}</p>
                     </h5>
-                  </div>
-                </div>
-                <div class="row my-2">
-                <input v-model="post.content" class="col-8" type="text" placeholder="Reply" />
-                <!-- <input v-model="replyPost.img_content" type="image"> -->
-                <button @click="replyToPost(post)" class="btn btn-outline-dark col-2">
-                  Reply
-                </button>
-                  <button
-                    class="btn btn-secondary bg-gradient col-2"
-                    type="button"
-                    @click="loadReplies(post.id)"
-                  >
-                    Show Replies
-                  </button>
-
-                </div>
+                    <div class="row my-2">
+                      <input
+                        v-model="post.content"
+                        class="col-8"
+                        type="text"
+                        placeholder="Reply"
+                      />
+                      <!-- <input v-model="replyPost.img_content" type="image"> -->
+                      <button
+                        @click="replyToPost(post)"
+                        class="btn btn-outline-dark col-2"
+                      >
+                        Reply
+                      </button>
+                      <button
+                        class="btn btn-secondary bg-gradient col-2"
+                        type="button"
+                        @click="loadReplies(post.id)"
+                      >
+                        Show Replies
+                      </button>
+                    </div>
                 <div
                   v-show="post.id === postReplyShow"
                   class="reply rounded shadow"
@@ -105,6 +110,8 @@
                           <!-- <img v-if="post.img_content" :src="'api/'+post.img_content"> -->
                         </h5>
                       </div>
+                  </div>
+                </div>
                     </div>
                   </div>
                 </div>
@@ -208,6 +215,7 @@ export default {
           params: { username: this.$store.state.username.username },
         })
         .then((response) => {
+          console.log(response);
           this.$store.state.UserData = response.data[0];
         });
     },
@@ -233,21 +241,18 @@ export default {
       return new Intl.DateTimeFormat("default", options).format(date);
     },
   },
-  async created() {
-    await this.getUser(), 
-    await this.loadFeed();
+  created() {
+    this.getUser(), this.loadFeed();
   },
 };
 </script>
 
 <style>
-
-@import url('https://fonts.googleapis.com/css2?family=Zen+Antique+Soft&family=Zen+Maru+Gothic&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Zen+Antique+Soft&family=Zen+Maru+Gothic&display=swap");
 h1 {
-  font-family: 'Zen Antique Soft', serif;
-
+  font-family: "Zen Antique Soft", serif;
 }
 .reply > div > div {
-  background: #cbccbc;
+  background: #ededed;
 }
 </style>
