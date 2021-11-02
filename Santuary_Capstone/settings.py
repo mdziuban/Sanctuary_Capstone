@@ -9,11 +9,11 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-import django_on_heroku
 
 from pathlib import Path
 from secret_key import SECRET_KEY
 from datetime import timedelta
+import django_on_heroku
 
 django_on_heroku.settings(locals())
 
